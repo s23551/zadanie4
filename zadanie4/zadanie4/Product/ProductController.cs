@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace zadanie4.Model;
 
@@ -14,19 +15,36 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetProducts()
     {
-        var productsTask = _productService.GetProducts();
-        IEnumerable<Product> products;
-        try
-        {
-            products = await productsTask;
-        }
-        catch
-        {
-            return Conflict();
-        }
-        return Ok(products);
+        return Ok(await _productService.GetProducts());
+    }
+
+    [HttpGet("{IdProduct:int}")]
+    public async Task<IActionResult> GetProduct([FromRoute] int IdProduct)
+    {
+        var success = await _productService.GetProduct(IdProduct);
+        return success != null ? Ok(success) : Conflict(Messages.ERR_NOT_FOUND);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddProduct([FromBody] ProductDTO dto)
+    {
+        var success = await _productService.AddProduct(dto);
+        return success ? StatusCode(StatusCodes.Status201Created) : Conflict();
+    }
+
+    [HttpPut("{IdProduct:int}")]
+    public async Task<IActionResult> UpdateProduct([FromRoute] int IdProduct, [FromBody] ProductDTO dto)
+    {
+        var success = await _productService.UpdateProduct(IdProduct, dto);
+        return success ? Ok() : Conflict();
+    }
+
+    [HttpDelete("{IdProduct:int}")]
+    public async Task<IActionResult> DeleteProduct([FromRoute] int IdProduct)
+    {
+        var success = await _productService.DeleteProduct(IdProduct);
+        return success ? Ok() : Conflict();
     }
 }
