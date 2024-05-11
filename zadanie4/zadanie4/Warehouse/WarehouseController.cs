@@ -15,8 +15,8 @@ public class WarehouseController : ControllerBase
 
     [HttpGet("")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult GetWarehouses()
+    public async Task<IActionResult> GetWarehouses()
     {
-        return Ok(_warehouseService.GetWarehouses());
+        return Ok(await _warehouseService.GetWarehouses());
     }
 }
