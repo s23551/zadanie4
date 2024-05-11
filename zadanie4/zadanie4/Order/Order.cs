@@ -17,5 +17,5 @@ public class Order
     [Required]
     public DateTime CreatedAt { get; set; }
     
-    public DateTime FulfilledAt { get; set; }
+    public DateTime? FulfilledAt { get; set; }
 }

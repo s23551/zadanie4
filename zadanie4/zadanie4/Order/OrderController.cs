@@ -17,6 +17,16 @@ public class OrderController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetOrders()
     {
-        return Ok(await _orderService.GetOrders());
+        var orderTask = _orderService.GetOrders();
+        IEnumerable<Order> orders;
+        try
+        {
+            orders = await orderTask;
+        }
+        catch
+        {
+            return Conflict();
+        }
+        return Ok(orders);
     }
 }

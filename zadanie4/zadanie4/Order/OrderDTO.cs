@@ -14,5 +14,5 @@ public class OrderDTO
     
     [Required]
     public DateTime CreatedAt { get; set; }
-    public DateTime FulfilledAt { get; set; }
+    public DateTime? FulfilledAt { get; set; }
 }

@@ -31,7 +31,7 @@ public class OrderRepository : IOrderRepository
                 IdProduct = (int)dr["IdProduct"],
                 Amount = (int)dr["Amount"],
                 CreatedAt = (DateTime)dr["CreatedAt"],
-                FulfilledAt = (DateTime)dr["FulfilledAt"]
+                FulfilledAt = await dr.IsDBNullAsync(dr.GetOrdinal("FulfilledAt")) ? (DateTime?) null : (DateTime) dr["FulfilledAt"]
             };
             orders.Add(order);
         }
