@@ -19,17 +19,17 @@ public class ProductService : IProductService
         throw new NotImplementedException();
     }
 
-    public bool AddProduct(ProductDTO dto)
+    public async Task<bool> AddProduct(ProductDTO dto)
     {
         throw new NotImplementedException();
     }
 
-    public bool UpdateProduct(int IdProduct, ProductDTO dto)
+    public async Task<bool> UpdateProduct(int IdProduct, ProductDTO dto)
     {
         throw new NotImplementedException();
     }
 
-    public bool DeleteProduct(int IdProduct)
+    public async Task<bool> DeleteProduct(int IdProduct)
     {
         throw new NotImplementedException();
     }
