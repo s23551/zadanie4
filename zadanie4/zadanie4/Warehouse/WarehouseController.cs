@@ -17,6 +17,17 @@ public class WarehouseController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetWarehouses()
     {
-        return Ok(await _warehouseService.GetWarehouses());
+        var warehousesTask = _warehouseService.GetWarehouses();
+        IEnumerable<Warehouse> warehouses;
+
+        try
+        {
+            warehouses = await warehousesTask;
+        }
+        catch
+        {
+            return Conflict();
+        }
+        return Ok(warehouses);
     }
 }

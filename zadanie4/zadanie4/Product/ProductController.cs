@@ -17,6 +17,16 @@ public class ProductController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetProducts()
     {
-        return Ok(await _productService.GetProducts());
+        var productsTask = _productService.GetProducts();
+        IEnumerable<Product> products;
+        try
+        {
+            products = await productsTask;
+        }
+        catch
+        {
+            return Conflict();
+        }
+        return Ok(products);
     }
 }
