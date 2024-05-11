@@ -2,7 +2,7 @@
 
 namespace zadanie4.Model;
 
-public class Product_Warehouse
+public class ProductWarehouse
 {
     public int IdProductWarehouse { get; set; }
     

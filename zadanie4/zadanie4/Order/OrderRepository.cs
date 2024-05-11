@@ -18,7 +18,7 @@ public class OrderRepository : IOrderRepository
 
         await using var cmd = new SqlCommand();
         cmd.Connection = con;
-        cmd.CommandText = "SELECT IdOrder, IdProduct, Amount, CreatedAt, FulfilledAt FROM Order";
+        cmd.CommandText = "SELECT IdOrder, IdProduct, Amount, CreatedAt, FulfilledAt FROM [Order]";
 
         var dr = await cmd.ExecuteReaderAsync();
         var orders = new List<Order>();
