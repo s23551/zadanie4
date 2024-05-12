@@ -14,23 +14,23 @@ public class OrderService : IOrderService
         return await _orderRepository.GetOrders();
     }
 
-    public async Task<Order> GetOrder(int IdOrder)
+    public async Task<Order?> GetOrder(int IdOrder)
     {
-        throw new NotImplementedException();
+        return await _orderRepository.GetOrder(IdOrder);
     }
 
-    public bool AddOrder(OrderDTO dto)
+    public async Task<bool> AddOrder(OrderDTO dto)
     {
-        throw new NotImplementedException();
+        return await _orderRepository.AddOrder(dto);
     }
 
-    public bool UpdateOrder(int IdOrder, OrderDTO dto)
+    public async Task<bool> UpdateOrder(int IdOrder, OrderDTO dto)
     {
-        throw new NotImplementedException();
+        return await _orderRepository.UpdateOrder(IdOrder, dto);
     }
 
-    public bool DeleteOrder(int IdOrder)
+    public async Task<bool> DeleteOrder(int IdOrder)
     {
-        throw new NotImplementedException();
+        return await _orderRepository.DeleteOrder(IdOrder);
     }
 }

@@ -39,23 +39,84 @@ public class OrderRepository : IOrderRepository
         return orders;
     }
 
-    public async Task<Order> GetOrder(int IdOrder)
+    public async Task<Order?> GetOrder(int IdOrder)
     {
-        throw new NotImplementedException();
+        await using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await con.OpenAsync();
+
+        await using var cmd = new SqlCommand();
+        cmd.Connection = con;
+        cmd.CommandText = "SELECT IdOrder, IdProduct, Amount, CreatedAt, FulfilledAt FROM [Order] WHERE IdOrder=@id";
+        cmd.Parameters.AddWithValue("@id", IdOrder);
+
+        var dr = await cmd.ExecuteReaderAsync();
+
+        if (await dr.ReadAsync())
+        {
+            var order = new Order
+            {
+                IdOrder = (int)dr["IdOrder"],
+                IdProduct = (int)dr["IdProduct"],
+                Amount = (int)dr["Amount"],
+                CreatedAt = (DateTime)dr["CreatedAt"],
+                FulfilledAt = await dr.IsDBNullAsync(dr.GetOrdinal("FulfilledAt"))
+                    ? (DateTime?)null
+                    : (DateTime)dr["FulfilledAt"]
+            };
+            return order;
+        }
+
+        return null;
     }
 
-    public bool AddOrder(OrderDTO dto)
+    public async Task<bool> AddOrder(OrderDTO dto)
     {
-        throw new NotImplementedException();
+        await using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await con.OpenAsync();
+
+        await using var cmd = new SqlCommand();
+        cmd.Connection = con;
+        cmd.CommandText =
+            "INSERT INTO [Order] (IdProduct, Amount, CreatedAt, FulfilledAt) VALUES (@idProduct, @amount, @createdAt, @fulfilledAt)";
+        cmd.Parameters.AddWithValue("@idProduct", dto.IdProduct);
+        cmd.Parameters.AddWithValue("@amount", dto.Amount);
+        cmd.Parameters.AddWithValue("@createdAt", dto.CreatedAt);
+        cmd.Parameters.AddWithValue("@fulfilledAt", dto.FulfilledAt);
+
+        var affectedRows = await cmd.ExecuteNonQueryAsync();
+        return affectedRows == 1;
     }
 
-    public bool UpdateOrder(int IdOrder, OrderDTO dto)
+    public async Task<bool> UpdateOrder(int IdOrder, OrderDTO dto)
     {
-        throw new NotImplementedException();
+        await using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await con.OpenAsync();
+
+        await using var cmd = new SqlCommand();
+        cmd.Connection = con;
+        cmd.CommandText =
+            "UPDATE [Order] SET IdProduct=@idProduct, Amount=@amount, CreatedAt=@createdAt, FulfilledAt=@fulfilledAt WHERE IdOrder=@id";
+        cmd.Parameters.AddWithValue("@idProduct", dto.IdProduct);
+        cmd.Parameters.AddWithValue("@amount", dto.Amount);
+        cmd.Parameters.AddWithValue("@createdAt", dto.CreatedAt);
+        cmd.Parameters.AddWithValue("@fulfilledAt", dto.FulfilledAt);
+        cmd.Parameters.AddWithValue("@id", IdOrder);
+
+        var affectedRows = await cmd.ExecuteNonQueryAsync();
+        return affectedRows == 1;
     }
 
-    public bool DeleteOrder(int IdOrder)
+    public async Task<bool> DeleteOrder(int IdOrder)
     {
-        throw new NotImplementedException();
+        await using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await con.OpenAsync();
+
+        await using var cmd = new SqlCommand();
+        cmd.Connection = con;
+        cmd.CommandText = "DELETE FROM [Order] WHERE IdOrder=@id";
+        cmd.Parameters.AddWithValue("@id", IdOrder);
+
+        var affectedRows = await cmd.ExecuteNonQueryAsync();
+        return affectedRows == 1;
     }
 }
