@@ -3,8 +3,8 @@
 public interface IWarehouseService
 {
     Task<IEnumerable<Warehouse>> GetWarehouses();
-    Task<Warehouse> GetWarehouse(int IdWarehouse);
-    bool AddWarehouse(WarehouseDTO dto);
-    bool UpdateWarehouse(int IdWarehouse, WarehouseDTO dto);
-    bool DeleteWarehouse(int IdWarehouse);
+    Task<Warehouse?> GetWarehouse(int IdWarehouse);
+    Task<bool> AddWarehouse(WarehouseDTO dto);
+    Task<bool> UpdateWarehouse(int IdWarehouse, WarehouseDTO dto);
+    Task<bool> DeleteWarehouse(int IdWarehouse);
 }

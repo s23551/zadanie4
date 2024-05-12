@@ -14,22 +14,22 @@ public class WarehouseService : IWarehouseService
         return await _warehouseRepository.GetWarehouses();
     }
 
-    public Task<Warehouse> GetWarehouse(int IdWarehouse)
+    public async Task<Warehouse> GetWarehouse(int IdWarehouse)
     {
         throw new NotImplementedException();
     }
 
-    public bool AddWarehouse(WarehouseDTO dto)
+    public async Task<bool> AddWarehouse(WarehouseDTO dto)
     {
         throw new NotImplementedException();
     }
 
-    public bool UpdateWarehouse(int IdWarehouse, WarehouseDTO dto)
+    public async Task<bool> UpdateWarehouse(int IdWarehouse, WarehouseDTO dto)
     {
         throw new NotImplementedException();
     }
 
-    public bool DeleteWarehouse(int IdWarehouse)
+    public async Task<bool> DeleteWarehouse(int IdWarehouse)
     {
         throw new NotImplementedException();
     }
