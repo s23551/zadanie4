@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 
 namespace zadanie4.Model;
 
@@ -14,5 +15,6 @@ public class OrderDTO
     
     [Required]
     public DateTime CreatedAt { get; set; }
+    
     public DateTime? FulfilledAt { get; set; }
 }
