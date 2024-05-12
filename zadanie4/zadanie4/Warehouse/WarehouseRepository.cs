@@ -61,7 +61,7 @@ public class WarehouseRepository : IWarehouseRepository
         return null;
     }
 
-    public async Task<bool> AdWarehouse(WarehouseDTO dto)
+    public async Task<bool> AddWarehouse(WarehouseDTO dto)
     {
         await using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
         await con.OpenAsync();

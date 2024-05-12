@@ -14,20 +14,36 @@ public class WarehouseController : ControllerBase
     }
 
     [HttpGet("")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetWarehouses()
     {
-        var warehousesTask = _warehouseService.GetWarehouses();
-        IEnumerable<Warehouse> warehouses;
+        return Ok(await _warehouseService.GetWarehouses());
+    }
 
-        try
-        {
-            warehouses = await warehousesTask;
-        }
-        catch
-        {
-            return Conflict();
-        }
-        return Ok(warehouses);
+    [HttpGet("{IdWarehouse:int}")]
+    public async Task<IActionResult> GetWarehouse([FromRoute] int IdWarehouse)
+    {
+        var success = await _warehouseService.GetWarehouse(IdWarehouse);
+        return success != null ? Ok(success) : Conflict(Messages.ERR_NOT_FOUND);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddWarehouse([FromBody] WarehouseDTO dto)
+    {
+        var success = await _warehouseService.AddWarehouse(dto);
+        return success ? StatusCode(StatusCodes.Status201Created) : Conflict();
+    }
+
+    [HttpPut("{IdWarehouse:int}")]
+    public async Task<IActionResult> UpdateWarehouse([FromRoute] int IdWarehouse, [FromBody] WarehouseDTO dto)
+    {
+        var success = await _warehouseService.UpdateWarehouse(IdWarehouse, dto);
+        return success ? Ok() : Conflict();
+    }
+
+    [HttpDelete("{IdWarehouse:int}")]
+    public async Task<IActionResult> DeleteWarehouse([FromRoute] int IdWarehouse)
+    {
+        var success = await _warehouseService.DeleteWarehouse(IdWarehouse);
+        return success ? Ok() : Conflict();
     }
 }
