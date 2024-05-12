@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*using Microsoft.AspNetCore.Mvc;
 
 namespace zadanie4.Model;
 
@@ -46,4 +46,4 @@ public class OrderController : ControllerBase
         var success = await _orderService.DeleteOrder(IdOrder);
         return success ? Ok() : Conflict(Messages.ERR_NOT_FOUND);
     }
-}
+}*/

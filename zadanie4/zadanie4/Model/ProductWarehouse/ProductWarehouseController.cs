@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*using Microsoft.AspNetCore.Mvc;
 
 namespace zadanie4.Model;
 
@@ -47,4 +47,4 @@ public class ProductWarehouseController : ControllerBase
         var success = await _productWarehouseService.DeleteProductWarehouse(IdProductWarehouse);
         return success ? Ok() : Conflict(Messages.ERR_NOT_FOUND);
     }
-}
+}*/

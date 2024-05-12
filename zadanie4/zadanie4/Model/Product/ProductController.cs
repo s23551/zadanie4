@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿/*using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace zadanie4.Model;
@@ -47,4 +47,4 @@ public class ProductController : ControllerBase
         var success = await _productService.DeleteProduct(IdProduct);
         return success ? Ok() : Conflict();
     }
-}
+}*/
