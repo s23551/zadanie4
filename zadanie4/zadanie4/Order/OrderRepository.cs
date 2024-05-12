@@ -76,12 +76,24 @@ public class OrderRepository : IOrderRepository
 
         await using var cmd = new SqlCommand();
         cmd.Connection = con;
-        cmd.CommandText =
-            "INSERT INTO [Order] (IdProduct, Amount, CreatedAt, FulfilledAt) VALUES (@idProduct, @amount, @createdAt, @fulfilledAt)";
+        if (!dto.FulfilledAt.HasValue)
+        {
+            cmd.CommandText =
+                "INSERT INTO [Order] (IdProduct, Amount, CreatedAt) VALUES(@idProduct, @amount, @createdAt)";
+            
+        }
+        else
+        {
+            cmd.CommandText =
+                "INSERT INTO [Order] (IdProduct, Amount, CreatedAt, FulfilledAt) " +
+                "VALUES (@idProduct, @amount, @createdAt, @fulfilledAt)"; 
+            cmd.Parameters.AddWithValue("@fulfilledAt", dto.FulfilledAt); 
+        }
+        
         cmd.Parameters.AddWithValue("@idProduct", dto.IdProduct);
         cmd.Parameters.AddWithValue("@amount", dto.Amount);
         cmd.Parameters.AddWithValue("@createdAt", dto.CreatedAt);
-        cmd.Parameters.AddWithValue("@fulfilledAt", dto.FulfilledAt);
+       
 
         var affectedRows = await cmd.ExecuteNonQueryAsync();
         return affectedRows == 1;
@@ -94,12 +106,20 @@ public class OrderRepository : IOrderRepository
 
         await using var cmd = new SqlCommand();
         cmd.Connection = con;
-        cmd.CommandText =
-            "UPDATE [Order] SET IdProduct=@idProduct, Amount=@amount, CreatedAt=@createdAt, FulfilledAt=@fulfilledAt WHERE IdOrder=@id";
+        if (dto.FulfilledAt.HasValue)
+        {
+            cmd.CommandText =
+                "UPDATE [Order] SET IdProduct=@idProduct, Amount=@amount, CreatedAt=@createdAt, FulfilledAt=@fulfilledAt WHERE IdOrder=@id";
+            cmd.Parameters.AddWithValue("@fulfilledAt", dto.FulfilledAt);
+        }
+        else
+        {
+            cmd.CommandText =
+                "UPDATE [Order] SET IdProduct=@idProduct, Amount=@amount, CreatedAt=@createdAt WHERE IdOrder=@id";
+        }
         cmd.Parameters.AddWithValue("@idProduct", dto.IdProduct);
         cmd.Parameters.AddWithValue("@amount", dto.Amount);
         cmd.Parameters.AddWithValue("@createdAt", dto.CreatedAt);
-        cmd.Parameters.AddWithValue("@fulfilledAt", dto.FulfilledAt);
         cmd.Parameters.AddWithValue("@id", IdOrder);
 
         var affectedRows = await cmd.ExecuteNonQueryAsync();
