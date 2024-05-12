@@ -14,23 +14,23 @@ public class ProductWarehouseService : IProductWarehouseService
         return await _productWarehouseRepository.GetProductWarehouses();
     }
 
-    public async Task<ProductWarehouse> GetProductWarehouse(int IdProductWarehouse)
+    public async Task<ProductWarehouse?> GetProductWarehouse(int IdProductWarehouse)
     {
-        throw new NotImplementedException();
+        return await _productWarehouseRepository.GetProductWarehouse(IdProductWarehouse);
     }
 
-    public bool AddProductWarehouse(ProductWarehouseDTO dto)
+    public async Task<bool> AddProductWarehouse(ProductWarehouseDTO dto)
     {
-        throw new NotImplementedException();
+        return await _productWarehouseRepository.AddProductWarehouse(dto);
     }
 
-    public bool UpdateProductWarehouse(int IdProductWarehouse, ProductWarehouseDTO dto)
+    public async Task<bool> UpdateProductWarehouse(int IdProductWarehouse, ProductWarehouseDTO dto)
     {
-        throw new NotImplementedException();
+        return await _productWarehouseRepository.UpdateProductWarehouse(IdProductWarehouse, dto);
     }
 
-    public bool DeleteProductWarehouse(int IdProductWarehouse)
+    public async Task<bool> DeleteProductWarehouse(int IdProductWarehouse)
     {
-        throw new NotImplementedException();
+        return await _productWarehouseRepository.DeleteProductWarehouse(IdProductWarehouse);
     }
 }

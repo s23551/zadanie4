@@ -42,23 +42,91 @@ public class ProductWarehouseRepository : IProductWarehouseRepository
         return productWarehouses;
     }
 
-    public async Task<ProductWarehouse> GetProductWarehouse(int IdProductWarehouse)
+    public async Task<ProductWarehouse?> GetProductWarehouse(int IdProductWarehouse)
     {
-        throw new NotImplementedException();
+        await using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await con.OpenAsync();
+
+        await using var cmd = new SqlCommand();
+        cmd.Connection = con;
+        cmd.CommandText =
+            "SELECT IdProductWareHouse, IdWarehouse, IdProduct, IdOrder, Amount, Price, CreatedAt " +
+            "FROM Product_Warehouse WHERE IdProductWarehouse=@id";
+        cmd.Parameters.AddWithValue("@id", IdProductWarehouse);
+
+        var dr = await cmd.ExecuteReaderAsync();
+        if (await dr.ReadAsync())
+        {
+            var productWarehouse = new ProductWarehouse
+            {
+                IdProductWarehouse = (int)dr["IdProductWarehouse"],
+                IdWarehouse = (int)dr["IdWarehouse"],
+                IdProduct = (int)dr["IdProduct"],
+                IdOrder = (int)dr["IdOrder"],
+                Amount = (int)dr["Amount"],
+                Price = (decimal)dr["Price"],
+                CreatedAt = (DateTime)dr["CreatedAt"]
+            };
+            return productWarehouse;
+        }
+
+        return null;
     }
 
-    public bool AddProductWarehouse(ProductWarehouseDTO dto)
+    public async Task<bool> AddProductWarehouse(ProductWarehouseDTO dto)
     {
-        throw new NotImplementedException();
+        await using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await con.OpenAsync();
+
+        await using var cmd = new SqlCommand();
+        cmd.Connection = con;
+        cmd.CommandText =
+            "INSERT INTO Product_Warehouse (IdWarehouse, IdProduct, IdOrder, Amount, Price, CreatedAt) " +
+            "VALUES (@idWarehouse, @idProduct, @idOrder, @amount, @price, @createdAt)";
+        cmd.Parameters.AddWithValue("@idWarehouse", dto.IdWarehouse);
+        cmd.Parameters.AddWithValue("@idProduct", dto.IdProduct);
+        cmd.Parameters.AddWithValue("@idOrder", dto.IdOrder);
+        cmd.Parameters.AddWithValue("@amount", dto.Amount);
+        cmd.Parameters.AddWithValue("@price", dto.Price);
+        cmd.Parameters.AddWithValue("@createdAt", dto.CreatedAt);
+
+        var affectedRows = await cmd.ExecuteNonQueryAsync();
+        return affectedRows == 1;
     }
 
-    public bool UpdateProductWarehouse(int IdProductWarehouse, ProductWarehouseDTO dto)
+    public async Task<bool> UpdateProductWarehouse(int IdProductWarehouse, ProductWarehouseDTO dto)
     {
-        throw new NotImplementedException();
+        await using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await con.OpenAsync();
+
+        await using var cmd = new SqlCommand();
+        cmd.Connection = con;
+        cmd.CommandText =
+            "UPDATE Product_Warehouse SET IdWarehouse=@idWarehouse, IdProduct=@idProduct, IdOrder=@idOrder," +
+            "Amount=@amount, Price=@price, CreatedAt=@createdAt WHERE IdProductWarehouse=@id";
+        cmd.Parameters.AddWithValue("@idWarehouse", dto.IdWarehouse);
+        cmd.Parameters.AddWithValue("@idProduct", dto.IdProduct);
+        cmd.Parameters.AddWithValue("@idOrder", dto.IdOrder);
+        cmd.Parameters.AddWithValue("@amount", dto.Amount);
+        cmd.Parameters.AddWithValue("@price", dto.Price);
+        cmd.Parameters.AddWithValue("@createdAt", dto.CreatedAt);
+        cmd.Parameters.AddWithValue("@id", IdProductWarehouse);
+
+        var affectedRows = await cmd.ExecuteNonQueryAsync();
+        return affectedRows == 1;
     }
 
-    public bool DeleteProductWarehouse(int IdProductWarehouse)
+    public async Task<bool> DeleteProductWarehouse(int IdProductWarehouse)
     {
-        throw new NotImplementedException();
+        await using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await con.OpenAsync();
+
+        await using var cmd = new SqlCommand();
+        cmd.Connection = con;
+        cmd.CommandText = "DELETE Product_Warehouse WHERE IdProductWarehouse=@id";
+        cmd.Parameters.AddWithValue("@id", IdProductWarehouse);
+
+        var affectedRows = await cmd.ExecuteNonQueryAsync();
+        return affectedRows == 1;
     }
 }
