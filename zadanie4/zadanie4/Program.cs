@@ -1,4 +1,5 @@
 using zadanie4.Model;
+using zadanie4.zadanie4;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,7 @@ builder.Services.AddScoped<IProductWarehouseRepository, ProductWarehouseReposito
 builder.Services.AddScoped<IProductWarehouseService, ProductWarehouseService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IAssignmentService, AssignmentService>();
 
 var app = builder.Build();
 

@@ -3,27 +3,21 @@ using zadanie4.Model;
 
 namespace zadanie4.zadanie4;
 
-[Route("api/zad/orders")]
+[Route("api/assignment")]
 [ApiController]
 public class WarehouseController : ControllerBase
 {
-    private readonly IOrderService _orderService;
+    private readonly IAssignmentService _assignmentService;
 
-    public WarehouseController(IOrderService orderService)
+    public WarehouseController(IAssignmentService assignmentService)
     {
-        _orderService = orderService;
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> GetOrders()
-    {
-        return Ok(await _orderService.GetOrders());
+        _assignmentService = assignmentService;
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddOrder([FromBody] OrderDTO dto)
+    public async Task<IActionResult> AddOrder([FromBody] Assignment dto)
     {
-        var success = await _orderService.AddOrder(dto);
+        var success = await _assignmentService.AddAssignment(dto);
         return success ? StatusCode(StatusCodes.Status201Created) : Conflict();
     }
 }

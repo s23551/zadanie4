@@ -69,6 +69,37 @@ public class OrderRepository : IOrderRepository
         return null;
     }
 
+    public async Task<Order?> GetOrderByIdProduct(int IdProduct)
+    {
+        await using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await con.OpenAsync();
+
+        await using var cmd = new SqlCommand();
+        cmd.Connection = con;
+        cmd.CommandText = "SELECT IdOrder, IdProduct, Amount, CreatedAt, FulfilledAt WHERE IdProduct=@id";
+        cmd.Parameters.AddWithValue("@id", IdProduct);
+
+        var dr = await cmd.ExecuteReaderAsync();
+        if (await dr.ReadAsync())
+        {
+            var order = new Order
+            {
+                IdOrder = (int)dr["IdOrder"],
+                IdProduct = (int)dr["IdProduct"],
+                Amount = (int)dr["Amount"],
+                CreatedAt = (DateTime)dr["CreatedAt"],
+                FulfilledAt = await dr.IsDBNullAsync(dr.GetOrdinal("FulfilledAt"))
+                    ? (DateTime?)null
+                    : (DateTime)dr["FulfilledAt"]
+            };
+            return order;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public async Task<bool> AddOrder(OrderDTO dto)
     {
         await using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);

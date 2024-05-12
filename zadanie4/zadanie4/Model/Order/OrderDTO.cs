@@ -10,7 +10,7 @@ public class OrderDTO
     public int IdProduct { get; set; }
     
     [Required]
-    [Range(0, int.MaxValue, ErrorMessage = Messages.ERR_NEGATIVE_VALUE)]
+    [Range(1, int.MaxValue, ErrorMessage = Messages.ERR_NEGATIVE_VALUE)]
     public int Amount { get; set; }
     
     [Required]

@@ -19,6 +19,11 @@ public class OrderService : IOrderService
         return await _orderRepository.GetOrder(IdOrder);
     }
 
+    public async Task<Order?> GetOrderByIdProduct(int IdProduct)
+    {
+        return await _orderRepository.GetOrderByIdProduct(IdProduct);
+    }
+
     public async Task<bool> AddOrder(OrderDTO dto)
     {
         return await _orderRepository.AddOrder(dto);
