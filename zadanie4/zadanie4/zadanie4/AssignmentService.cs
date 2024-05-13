@@ -7,12 +7,15 @@ public class AssignmentService : IAssignmentService
     private readonly IOrderService _orderService;
     private readonly IWarehouseService _warehouseService;
     private readonly IProductService _productService;
+    private readonly IProductWarehouseService _productWarehouseService;
 
-    public AssignmentService(IOrderService orderService, IWarehouseService warehouseService, IProductService productService)
+    public AssignmentService(IOrderService orderService, IWarehouseService warehouseService, 
+        IProductService productService, IProductWarehouseService productWarehouseService)
     {
         _orderService = orderService;
         _warehouseService = warehouseService;
         _productService = productService;
+        _productWarehouseService = productWarehouseService;
     }
 
     public async Task<bool> AddAssignment(Assignment dto)
@@ -25,6 +28,20 @@ public class AssignmentService : IAssignmentService
         }
 
         var order = await _orderService.GetOrderByIdProduct(dto.IdProduct);
+        var validatedOrder = order != null && 
+                             order.Amount == dto.Amount && order.CreatedAt < dto.CreatedAt;
+        if (!validatedOrder)
+        {
+            return false;
+        }
+
+        var fulfilledOrder = (await _productWarehouseService.GetProductWarehouseByIdOrder(order.IdOrder)) == null;
+        if (fulfilledOrder)
+        {
+            return false;
+        }
+        
+        
         // TODO
         return true;
     }

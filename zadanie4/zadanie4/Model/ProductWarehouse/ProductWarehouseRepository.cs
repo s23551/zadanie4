@@ -73,6 +73,36 @@ public class ProductWarehouseRepository : IProductWarehouseRepository
         return null;
     }
 
+    public async Task<ProductWarehouse?> GetProductWarehouseByIdOrder(int IdOrder)
+    {
+        await using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await con.OpenAsync();
+
+        await using var cmd = new SqlCommand();
+        cmd.Connection = con;
+        cmd.CommandText =
+            "SELECT IdProductWarehouse, IdWarehouse, IdProduct, IdOrder, Amount, Price, CreatedAt WHERE IdOrder=@id";
+        cmd.Parameters.AddWithValue("@id", IdOrder);
+
+        var dr = await cmd.ExecuteReaderAsync();
+        if (await dr.ReadAsync())
+        {
+            var productWarehouse = new ProductWarehouse
+            {
+                IdProductWarehouse = (int)dr["IdProductWarehouse"],
+                IdWarehouse = (int)dr["IdWarehouse"],
+                IdProduct = (int)dr["IdProduct"],
+                IdOrder = (int)dr["IdOrder"],
+                Amount = (int)dr["Amount"],
+                Price = (decimal)dr["Price"],
+                CreatedAt = (DateTime)dr["CreatedAt"]
+            };
+            return productWarehouse;
+        }
+
+        return null;
+    }
+
     public async Task<bool> AddProductWarehouse(ProductWarehouseDTO dto)
     {
         await using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);

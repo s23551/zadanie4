@@ -19,6 +19,11 @@ public class ProductWarehouseService : IProductWarehouseService
         return await _productWarehouseRepository.GetProductWarehouse(IdProductWarehouse);
     }
 
+    public async Task<ProductWarehouse?> GetProductWarehouseByIdOrder(int IdOrder)
+    {
+        return await _productWarehouseRepository.GetProductWarehouseByIdOrder(IdOrder);
+    }
+
     public async Task<bool> AddProductWarehouse(ProductWarehouseDTO dto)
     {
         return await _productWarehouseRepository.AddProductWarehouse(dto);
