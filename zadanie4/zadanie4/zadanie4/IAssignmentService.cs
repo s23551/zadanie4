@@ -2,5 +2,5 @@
 
 public interface IAssignmentService
 {
-    Task<bool> AddAssignment(Assignment dto);
+    Task<int?> AddAssignment(Assignment dto);
 }

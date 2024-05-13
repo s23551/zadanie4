@@ -18,6 +18,6 @@ public class WarehouseController : ControllerBase
     public async Task<IActionResult> AddOrder([FromBody] Assignment dto)
     {
         var success = await _assignmentService.AddAssignment(dto);
-        return success ? StatusCode(StatusCodes.Status201Created) : Conflict();
+        return success != null ? StatusCode(StatusCodes.Status201Created) : Conflict();
     }
 }
