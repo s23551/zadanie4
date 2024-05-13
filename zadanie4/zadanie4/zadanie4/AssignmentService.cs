@@ -1,4 +1,5 @@
-﻿using zadanie4.Model;
+﻿using System.Data.SqlClient;
+using zadanie4.Model;
 
 namespace zadanie4.zadanie4;
 
@@ -50,7 +51,38 @@ public class AssignmentService : IAssignmentService
             return (await _productWarehouseService.GetProductWarehouseByIdOrder(order.IdOrder))?.IdProduct;
         }
         
-        // TODO
+        return null;
+    }
+
+    public async Task<int?> AddAssignmentProcedure(Assignment dto)
+    {
+        var product = await _productService.GetProduct(dto.IdProduct);
+        var warehouse = await _warehouseService.GetWarehouse(dto.IdWarehouse);
+        if (product == null || warehouse == null)
+        {
+            return null;
+        }
+
+        var order = await _orderService.GetOrderByIdProduct(dto.IdProduct);
+        var validatedOrder = order != null && 
+                             order.Amount == dto.Amount && order.CreatedAt < dto.CreatedAt;
+        if (!validatedOrder)
+        {
+            return null;
+        }
+
+        var fulfilledOrder = (await _productWarehouseService.GetProductWarehouseByIdOrder(order.IdOrder)) == null;
+        if (fulfilledOrder)
+        {
+            return null;
+        }
+
+        var procedureSuccess = await _assignmentRepository.FulfillAssignmentProcedure(dto, order, product.Price);
+        if (procedureSuccess)
+        {
+            return (await _productWarehouseService.GetProductWarehouseByIdOrder(order.IdOrder))?.IdProduct;
+        }
+
         return null;
     }
 }
